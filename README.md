@@ -73,3 +73,102 @@ SELECT custid, region
 FROM Sales.Customers
 ORDER BY 
 	CASE WHEN REGION IS NULL THEN 1 ELSE 0 END, region;
+
+
+-- Chapter 3 Exercises
+-- 1. Write a query that generates five copies of each employee row.
+
+SELECT E.empid, E.firstname, E.lastname, N.n
+FROM HR.Employees AS E
+	CROSS JOIN dbo.nums AS N
+	WHERE N.n <= 5
+	ORDER BY N, empid;
+
+--  1-2. Write a query that returns a row for each employee and day in the range June 12, 2016 through June 16, 2016
+SELECT E.empid,
+DATEADD(day, D.n - 1, CAST ('20160612' AS DATE)) AS DT
+FROM HR.Employees AS E
+	CROSS JOIN dbo.nums AS D
+	WHERE D.n <= DATEDIFF(day, '20160612', '20160616') + 1
+	ORDER BY empid, dt;
+
+	-- 2. Explain wha's wrong in the following query, and provide a correct alternative:
+	--SELECT Customers.custid, Customers.companyname, Orders.orderid, Orders.orderdate
+	--FROM Sales.Customers AS C
+		--INNER JOIN Sales.Orders AS O
+			--ON Customers.custid = Orders.custid;
+
+	--Aliases for both tables have been has been declared, so with logical processing steps, it is not recognizing them in the query if they do not have the same naming scheme. Changing it to below, fixes this problem. 
+
+	SELECT C.custid, C.companyname, O.orderid, O.orderdate
+	FROM Sales.Customers AS C
+		INNER JOIN Sales.Orders AS O
+			ON C.custid = O.custid;
+
+
+-- 3. Return US customers, and for each customer return the total number of orders and total quantities
+
+SELECT * 
+FROM Sales.Customers;
+
+SELECT * 
+FROM Sales.Orders;
+
+SELECT * 
+FROM Sales.OrderDetails;
+
+SELECT C.custid,COUNT(DISTINCT O.orderid) AS OrderTotal, SUM(OD.qty) AS TotalQuantity
+FROM Sales.Customers AS C
+INNER JOIN Sales.Orders AS O
+ON O.custid = C.custid
+INNER JOIN Sales.OrderDetails AS OD
+ON OD.orderid = O.orderid
+WHERE C.country = N'USA'
+GROUP BY C.custid;
+
+-- 4. Return customers and their orders, including customers who placed no orders
+
+SELECT C.custid, C.companyname, O.orderid, O.orderdate
+FROM Sales.Customers AS C
+LEFT OUTER JOIN Sales.Orders AS O
+ON O.custid = C.custid;
+
+-- 5. Return customers who placed no orders
+
+SELECT C.custid, C.companyname
+FROM Sales.Customers AS C
+LEFT OUTER JOIN Sales.Orders AS O
+ON O.custid = C.custid
+WHERE orderid IS NULL;
+
+-- 6. Return Customers with orders placed on Feburary 12, 2016 along with their orders:
+SELECT C.custid, C.companyname, O.orderid, O.orderdate
+FROM Sales.Customers AS C
+INNER JOIN Sales.Orders AS O
+ON O.custid = C.custid
+WHERE O.orderdate = '2016-02-12';
+
+--7. Write a query that returns all customers in the output, but matches them with their respective orders only if they were placed on February 12, 2016
+SELECT C.custid, C.companyname, O.orderid, O.orderdate
+FROM Sales.Customers AS C
+LEFT OUTER JOIN Sales.Orders AS O
+ON O.custid = C.custid
+AND O.orderdate = '20160212';
+
+-- 8. Explain why the following query isn't a correct query for exercise 7
+--SELECT C.custid, C.companyname, O.orderid, O.orderdate
+--FROM Sales.Customers AS C
+	--LEFT OUTER JOIN Sales.Orders AS O
+	-- ON O.custid = C.custid
+--WHERE O.orderdate = '20160212'
+	--OR O.orderid IS NULL
+
+-- This query will only return those who have not placed an order, or those who did on the given date. All other customers will not be included.
+
+-- 9.  Return all customers, and for each return a Yes/No value depending on whether the customer placed orders on Feburary 12, 2016:
+SELECT DISTINCT C.custid, C.companyname, 
+	CASE WHEN O.orderid IS NOT NULL THEN 'Yes' ELSE 'No' END AS OrderOn20160212
+FROM Sales.Customers AS C
+	LEFT OUTER JOIN Sales.Orders AS O
+		ON O.custid = C.Custid
+		AND O.orderdate = '20160212';
