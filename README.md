@@ -1,8 +1,12 @@
 # T-SQL Fundamentals Exercises
 
+|        Chapter       |    Link to Exercises   |
+| -------------------- | ---------------------- |
+| Single-Table Queries | [Chapter 2](Chapter-2) |
+| Joins                | [Chapter 3](Chapter-3) |
 
-
-## Chapter 2 Exercises: Single-Table Queries
+## Chapter-2
+### Exercises: Single-Table Queries
 
 **-- 1. Write a query against the Sales.Orders table that returns orders placed in June 2015**
 
@@ -118,7 +122,8 @@ ORDER BY
  	CASE WHEN REGION IS NULL THEN 1 ELSE 0 END, region;
 
 
-## **Chapter 3 Exercises: Joins**
+## Chapter-3
+### Exercises: Joins
 
 **-- 1. Write a query that generates five copies of each employee row.**
 
