@@ -1,5 +1,7 @@
 # T-SQL Fundamentals Exercises
 
+
+
 ## Chapter 2 Exercises: Single-Table Queries
 
 **-- 1. Write a query against the Sales.Orders table that returns orders placed in June 2015**
@@ -47,7 +49,7 @@ FROM HR.Employees
 
 WHERE lastname COLLATE Latin1_General_CS_AS LIKE N'[abcdefghijklmnopqrstuvwxyz]%';
 
--- 6. Explain the difference between the following 2 queries:
+**-- 6. Explain the difference between the following 2 queries:**
 
 **-- Query 1**
 
