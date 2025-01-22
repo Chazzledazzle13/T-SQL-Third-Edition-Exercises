@@ -1,23 +1,27 @@
-# SQLPractice-- 
+# T-SQL Fundamentals Exercises
 
-Chapter 2 Exercises
+**Chapter 2 Exercises: Single-Table Queries
 
 -- 1. Write a query against the Sales.Orders table that returns orders placed in June 2015
+
 SELECT * 
 FROM Sales.Orders
 WHERE MONTH(orderdate) = 6;
 
 -- 2. Write a query against the Sales.Orders table that returns orders placed on the last day of the month
+
 SELECT *
 FROM Sales.Orders
 WHERE orderdate = EOMONTH(orderdate);
 
 -- 3. Write a query against the HR.Employees table that returns employees with a last name containing the letter e twice or more
+
 SELECT empid, firstname, lastname
 FROM HR.Employees
 WHERE LEN(LastName) - LEN(REPLACE(LastName, 'e', '')) >= 2;
 
 -- 4. Write a query against the Sales.OrdersDetails table that returns orders with a total value greater than 10,000, sorted by total value
+
 SELECT orderid, SUM(qty * unitprice) AS totalvalue
 FROM Sales.OrderDetails
 GROUP BY orderid
@@ -25,6 +29,7 @@ HAVING (SUM(qty * unitprice) > 10000)
 ORDER BY totalvalue DESC;
 
 -- 5. To check the validity of the data, write a query against the HR.Employees table that returns employees with a last name that starts with a lowercase English letter in the range a through z.
+
 SELECT empid, lastname
 FROM HR.Employees
 WHERE lastname COLLATE Latin1_General_CS_AS LIKE N'[abcdefghijklmnopqrstuvwxyz]%';
@@ -46,6 +51,7 @@ WHERE lastname COLLATE Latin1_General_CS_AS LIKE N'[abcdefghijklmnopqrstuvwxyz]%
 -- The first query groups all orders by empid that takes place before the given date. The second query does the same, but also filters out employees who have not placed an order after the given date, which is why the first query gives 9 rows of data, to the other's four
 
 -- 7. Write a query against the Sales.Orders table that returns the three shipped-to countries with the highest average freight in 2015
+
 SELECT TOP 3 shipcountry, AVG(freight) AS avgfreight
 FROM Sales.Orders
 WHERE YEAR(orderdate) = 2015
@@ -75,8 +81,9 @@ ORDER BY
 	CASE WHEN REGION IS NULL THEN 1 ELSE 0 END, region;
 
 
--- Chapter 3 Exercises
--- 1. Write a query that generates five copies of each employee row.
+-- **Chapter 3 Exercises: Joins**
+
+-- *1. Write a query that generates five copies of each employee row.*
 
 SELECT E.empid, E.firstname, E.lastname, N.n
 FROM HR.Employees AS E
